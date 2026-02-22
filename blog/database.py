@@ -10,3 +10,11 @@ engine = create_engine(ENGINE_URL , connect_args={"check_same_thread": False})
 Base = declarative_base()
 
 SessionLocal = sessionmaker(bind=engine, autocommit=False, autoflush=False)
+
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+        
