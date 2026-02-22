@@ -18,18 +18,16 @@ def get_db():
         
 @app.post("/blog",status_code = status.HTTP_201_CREATED,tags=['blog'])
 def create(request: schemas.Blog, db : Session = Depends(get_db)):
-    new_blog = models.Blog(title = request.title, body = request.body)
+    new_blog = models.Blog(title = request.title, body = request.body, user_id = 1)
     db.add(new_blog)
     db.commit()
     db.refresh(new_blog)
     return new_blog
 
-@app.get("/blog", response_model = list[schemas.ShowBlog], tags=['blog'])
-def all(db: Session = Depends(get_db)):
-    blogs = db.query(models.Blog).all()
-
-
-    return blogs
+# @app.get("/blog", response_model = list[schemas.ShowBlog], tags=['blog'])
+# def all(db: Session = Depends(get_db)):
+#     blogs = db.query(models.Blog).all()
+#     return blogs
     
 @app.get("/blog/{id}",response_model  = schemas.ShowBlog, tags=['blog'])
 def show(id:int,  db:Session = Depends(get_db)):
